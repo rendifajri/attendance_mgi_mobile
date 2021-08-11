@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:attendance_mgi_mobile/helpers/config.dart';
 import 'package:attendance_mgi_mobile/helpers/style.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _LoginState extends State<Login> {
       prefs.setString("name", body['response']['name']);
       prefs.setString("role", body['response']['role']);
       prefs.setString("api_token", body['response']['api_token']);
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MainMenu()),
       );
@@ -60,91 +61,95 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                pinned: false,
-                snap: false,
-                floating: false,
-                elevation: 0,
-                backgroundColor: RenStyle.renColorGreen,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text(RenConfig.renTitle),
-                  titlePadding: EdgeInsetsDirectional.only(
-                    start: 20.0,
-                    bottom: 17.0,
-                  ),
-                ),
-              ),
-            ];
-          },
-          body: Padding(
-              padding: EdgeInsets.all(10),
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(10),
-                    child: Image.asset('assets/images/logo.png'),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                          color: RenStyle.renColorGreen,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20),
+    return new WillPopScope(
+        onWillPop: () {
+          exit(0);
+        },
+        child: new Scaffold(
+          body: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    pinned: false,
+                    snap: false,
+                    floating: false,
+                    elevation: 0,
+                    backgroundColor: RenStyle.renColorBase,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text(RenConfig.renTitle),
+                      titlePadding:
+                          EdgeInsetsDirectional.only(start: 20.0, bottom: 17.0),
                     ),
                   ),
-                  Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(0),
-                      child: Text(
-                        textError,
-                        style: TextStyle(
-                            color: Colors.red,
+                ];
+              },
+              body: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: ListView(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(10),
+                        child: Image.asset('assets/images/logo.png'),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                            color: RenStyle.renColorBase,
                             fontWeight: FontWeight.w500,
-                            fontSize: 15),
-                      )),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: TextField(
-                      controller: usernameController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'User Name',
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: TextField(
-                      obscureText: true,
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Password',
+                      Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(0),
+                          child: Text(
+                            textError,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          )),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: TextField(
+                          controller: usernameController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'User Name',
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    height: 70,
-                    padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                    child: MaterialButton(
-                      textColor: Colors.white,
-                      color: RenStyle.renColorGreen,
-                      child: Text('Login'),
-                      onPressed: () {
-                        loginAction();
-                      },
-                    ),
-                  ),
-                ],
-              ))),
-    );
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: TextField(
+                          obscureText: true,
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Password',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 70,
+                        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                        child: MaterialButton(
+                          textColor: Colors.white,
+                          color: RenStyle.renColorBase,
+                          child: Text('Login'),
+                          onPressed: () {
+                            loginAction();
+                          },
+                        ),
+                      ),
+                    ],
+                  ))),
+        ));
   }
 }

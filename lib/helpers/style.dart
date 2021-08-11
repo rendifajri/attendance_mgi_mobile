@@ -1,5 +1,6 @@
 import 'dart:ui';
 
 class RenStyle {
-  static Color renColorGreen = Color.fromRGBO(57, 125, 171, 1);
+  static Color renColorBase = Color.fromRGBO(57, 125, 171, 1);
+  static Color renColorGrey = Color.fromRGBO(170, 170, 170, 1);
 }
