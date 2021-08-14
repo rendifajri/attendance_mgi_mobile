@@ -1,7 +1,9 @@
 import 'package:attendance_mgi_mobile/helpers/config.dart';
 import 'package:attendance_mgi_mobile/helpers/style.dart';
+import 'package:attendance_mgi_mobile/views/main_menu/user_list.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'main_menu/home.dart';
 import 'login.dart';
 
 class MainMenu extends StatefulWidget {
@@ -13,7 +15,7 @@ class _MainMenuState extends State<MainMenu> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     Home("Rumah"),
-    Home("Pengguna"),
+    UserList(),
     Home("Kehadiran"),
     //Home("Seting"),
     Home("Profil"),
@@ -93,6 +95,31 @@ class _MainMenuState extends State<MainMenu> {
             },
             body: _children[_currentIndex],
           ),
+          floatingActionButton: SpeedDial(
+            backgroundColor: RenStyle.renColorBase,
+            animatedIcon: AnimatedIcons.menu_close,
+            children: [
+              SpeedDialChild(
+                child: Icon(Icons.add),
+                label: 'Add',
+                backgroundColor: RenStyle.renColorBaseLight,
+                foregroundColor: Colors.white,
+                onTap: () {},
+              ),
+              SpeedDialChild(
+                child: Icon(Icons.note_add),
+                label: 'Import',
+                backgroundColor: RenStyle.renColorBaseLight,
+                foregroundColor: Colors.white,
+                onTap: () {},
+              )
+            ],
+          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {},
+          //   tooltip: 'Increment',
+          //   child: Icon(Icons.add),
+          // ),
           bottomNavigationBar: BottomNavigationBar(
             onTap: onTabTapped,
             currentIndex: _currentIndex,
@@ -107,7 +134,7 @@ class _MainMenuState extends State<MainMenu> {
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.supervisor_account),
-                label: 'User',
+                label: 'Employee',
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.access_time),

@@ -83,73 +83,71 @@ class _LoginState extends State<Login> {
                   ),
                 ];
               },
-              body: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: ListView(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(10),
-                        child: Image.asset('assets/images/logo.png'),
+              body: ListView(
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    child: Image.asset('assets/images/logo.png'),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        color: RenStyle.renColorBase,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            color: RenStyle.renColorBase,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
+                    ),
+                  ),
+                  Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(0),
+                      child: Text(
+                        textError,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
                         ),
+                      )),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    child: TextField(
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'User Name',
                       ),
-                      Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(0),
-                          child: Text(
-                            textError,
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          )),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: TextField(
-                          controller: usernameController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'User Name',
-                          ),
-                        ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: TextField(
+                      obscureText: true,
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Password',
                       ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: TextField(
-                          obscureText: true,
-                          controller: passwordController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Password',
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 70,
-                        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                        child: MaterialButton(
-                          textColor: Colors.white,
-                          color: RenStyle.renColorBase,
-                          child: Text('Login'),
-                          onPressed: () {
-                            loginAction();
-                          },
-                        ),
-                      ),
-                    ],
-                  ))),
+                    ),
+                  ),
+                  Container(
+                    height: 75,
+                    padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                    child: MaterialButton(
+                      textColor: Colors.white,
+                      color: RenStyle.renColorBase,
+                      child: Text('Login'),
+                      onPressed: () {
+                        loginAction();
+                      },
+                    ),
+                  ),
+                ],
+              )),
         ));
   }
 }
