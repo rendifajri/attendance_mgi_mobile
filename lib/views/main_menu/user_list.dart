@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:attendance_mgi_mobile/helpers/config.dart';
-import 'package:attendance_mgi_mobile/helpers/style.dart';
+//import 'package:attendance_mgi_mobile/helpers/style.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,26 +14,40 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
-  int value = 0;
+  int page = 1;
+  int maxPage = 1;
   dynamic apiResult = [];
+  List<DataRow> dr = [];
 
-  getData() async {
+  getData(int page) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final Response response = await get(
-      Uri.parse(RenConfig.renApiUrl + "/api/employee"),
+      Uri.parse(RenConfig.renApiUrl +
+          "/api/employee?page=" +
+          page.toString() +
+          "&limit=10"),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + prefs.getString('api_token').toString()
       },
     );
-    var body = json.decode(response.body);
+    var body = await json.decode(response.body);
     //print(jsonDecode(response.body));
+    dr = <DataRow>[];
     if (body['status'] == "success") {
       apiResult = body['response'];
-      //print(apiResult);
+      maxPage = int.parse(body['response_total_page'].toString());
       setState(() {
-        value = body['response'].length;
-        print(value);
+        for (var res in apiResult) {
+          dr.add(DataRow(
+            cells: <DataCell>[
+              DataCell(Text(res['nik'])),
+              DataCell(Text(res['name'])),
+              DataCell(Text(res['department']["name"])),
+              DataCell(Text(res['shift'].toString())),
+            ],
+          ));
+        }
       });
     } else {
       Navigator.pushReplacement(
@@ -45,197 +59,46 @@ class _UserListState extends State<UserList> {
 
   @override
   Widget build(BuildContext context) {
-    getData();
+    getData(page);
 
     return ListView(children: <Widget>[
       DataTable(
-        sortColumnIndex: 2,
-        sortAscending: true,
+        //sortColumnIndex: 2,
+        //sortAscending: true,
         columnSpacing: 0,
         dataRowHeight: 30,
         headingRowHeight: 30,
         columns: const <DataColumn>[
-          DataColumn(
-            label: Text('Name'),
-          ),
-          DataColumn(
-            label: Text('Age'),
-          ),
-          DataColumn(
-            label: Text('Job'),
-          ),
+          DataColumn(label: Text('NIK')),
+          DataColumn(label: Text('Name')),
+          DataColumn(label: Text('Department')),
+          DataColumn(label: Text('Shift')),
         ],
-        rows: const <DataRow>[
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Mohit')),
-              DataCell(Text('23')),
-              DataCell(Text('Professional')),
-            ],
-          ),
-          DataRow(
-            cells: <DataCell>[
-              DataCell(Text('Aditya')),
-              DataCell(Text('24')),
-              DataCell(Text('Associate Professor')),
-            ],
-          ),
-        ],
+        rows: this.dr,
       ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            TextButton(
+                onPressed: () {
+                  page--;
+                  if (page < 1) page = 1;
+                  getData(page);
+                },
+                child: Text("Prev")),
+            Text(page.toString() + "/" + maxPage.toString()),
+            TextButton(
+                onPressed: () {
+                  page++;
+                  if (page > maxPage) page = maxPage;
+                  getData(page);
+                },
+                child: Text("Next")),
+          ],
+        ),
+      )
     ]);
   }
 }
