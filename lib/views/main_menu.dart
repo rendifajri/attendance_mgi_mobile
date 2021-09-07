@@ -1,6 +1,8 @@
 import 'package:attendance_mgi_mobile/helpers/config.dart';
 import 'package:attendance_mgi_mobile/helpers/style.dart';
 import 'package:attendance_mgi_mobile/views/main_menu/user_list.dart';
+import 'package:attendance_mgi_mobile/views/user_add.dart';
+import 'package:attendance_mgi_mobile/views/user_import.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'main_menu/home.dart';
@@ -13,6 +15,7 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   int _currentIndex = 0;
+  bool _floatBtn = false;
   final List<Widget> _children = [
     Home("Rumah"),
     UserList(),
@@ -22,6 +25,11 @@ class _MainMenuState extends State<MainMenu> {
   ];
 
   void onTabTapped(int index) {
+    if (index == 1)
+      _floatBtn = true;
+    else
+      _floatBtn = false;
+
     setState(() {
       _currentIndex = index;
     });
@@ -98,20 +106,31 @@ class _MainMenuState extends State<MainMenu> {
           floatingActionButton: SpeedDial(
             backgroundColor: RenStyle.renColorBase,
             animatedIcon: AnimatedIcons.menu_close,
+            visible: _floatBtn,
             children: [
               SpeedDialChild(
                 child: Icon(Icons.add),
                 label: 'Add',
                 backgroundColor: RenStyle.renColorBaseLight,
                 foregroundColor: Colors.white,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserAdd()),
+                  );
+                },
               ),
               SpeedDialChild(
                 child: Icon(Icons.note_add),
                 label: 'Import',
                 backgroundColor: RenStyle.renColorBaseLight,
                 foregroundColor: Colors.white,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserImport()),
+                  );
+                },
               )
             ],
           ),

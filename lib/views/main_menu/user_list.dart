@@ -43,7 +43,7 @@ class _UserListState extends State<UserList> {
             cells: <DataCell>[
               DataCell(Text(res['nik'])),
               DataCell(Text(res['name'])),
-              DataCell(Text(res['department']["name"])),
+              DataCell(Text(res['department'])),
               DataCell(Text(res['shift'].toString())),
             ],
           ));
