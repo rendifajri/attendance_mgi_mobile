@@ -31,11 +31,10 @@ class _LoginState extends State<Login> {
   }
 
   loginAction() async {
-    textError = '';
+    setState(() {
+      textError = '';
+    });
     try {
-      setState(() {
-        textError = '';
-      });
       Response response = await post(
         Uri.parse(RenConfig.renApiUrl + "/api/login"),
         headers: <String, String>{"Content-Type": "application/json"},
@@ -43,7 +42,7 @@ class _LoginState extends State<Login> {
           'username': usernameController.text,
           'password': passwordController.text,
         }),
-      ).timeout(Duration(seconds: 3));
+      ).timeout(Duration(seconds: 10));
       // print(response);
       var body = json.decode(response.body);
       print(jsonDecode(response.body));
@@ -62,8 +61,8 @@ class _LoginState extends State<Login> {
           textError = body['message'];
         });
       }
-    } catch (_) {
-      print("Tidak bisa mengakses ser");
+    } catch (err) {
+      print(err);
       setState(() {
         textError = "Tidak bisa mengakses server";
       });
@@ -103,7 +102,7 @@ class _LoginState extends State<Login> {
               ),
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
                 child: Text(
                   'Login',
                   style: TextStyle(
@@ -156,9 +155,7 @@ class _LoginState extends State<Login> {
                   color: RenStyle.renColorBase,
                   child: Text(
                     'Login',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
+                    style: TextStyle(fontSize: 18),
                   ),
                   onPressed: () {
                     loginAction();

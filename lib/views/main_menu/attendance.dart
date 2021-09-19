@@ -8,12 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../login.dart';
 
-class UserList extends StatefulWidget {
+class Attendance extends StatefulWidget {
   @override
-  _UserListState createState() => _UserListState();
+  _AttendanceState createState() => _AttendanceState();
 }
 
-class _UserListState extends State<UserList> {
+class _AttendanceState extends State<Attendance> {
   int page = 1;
   int maxPage = 1;
   dynamic apiResult = [];
@@ -23,7 +23,7 @@ class _UserListState extends State<UserList> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final Response response = await get(
       Uri.parse(RenConfig.renApiUrl +
-          "/api/employee?page=" +
+          "/api/attendance?page=" +
           page.toString() +
           "&limit=10"),
       headers: <String, String>{
@@ -39,12 +39,23 @@ class _UserListState extends State<UserList> {
       maxPage = int.parse(body['response_total_page'].toString());
       setState(() {
         for (var res in apiResult) {
+          String checkin = res['checkin'] != null
+              ? res['checkin'].toString().split(" ")[1].split(":")[0] +
+                  ":" +
+                  res['checkin'].toString().split(" ")[1].split(":")[1]
+              : "";
+          String checkout = res['checkout'] != null
+              ? res['checkout'].toString().split(" ")[1].split(":")[0] +
+                  ":" +
+                  res['checkout'].toString().split(" ")[1].split(":")[1]
+              : "";
           dr.add(DataRow(
             cells: <DataCell>[
-              DataCell(Text(res['nik'])),
-              DataCell(Text(res['name'])),
-              DataCell(Text(res['department'])),
-              DataCell(Text(res['shift'].toString())),
+              DataCell(Text(res['employee']['nik'])),
+              DataCell(Text(res['employee']['name'])),
+              DataCell(Text(res['date'])),
+              DataCell(Text(checkin)),
+              DataCell(Text(checkout)),
             ],
           ));
         }
@@ -75,8 +86,9 @@ class _UserListState extends State<UserList> {
         columns: const <DataColumn>[
           DataColumn(label: Text('NIK')),
           DataColumn(label: Text('Name')),
-          DataColumn(label: Text('Department')),
-          DataColumn(label: Text('Shift')),
+          DataColumn(label: Text('Date')),
+          DataColumn(label: Text('In')),
+          DataColumn(label: Text('Out')),
         ],
         rows: this.dr,
       ),

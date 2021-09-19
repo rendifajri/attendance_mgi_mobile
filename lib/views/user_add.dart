@@ -19,11 +19,10 @@ class _UserAddState extends State<UserAdd> {
   String textError = '';
 
   addAction() async {
-    textError = '';
+    setState(() {
+      textError = '';
+    });
     try {
-      setState(() {
-        textError = '';
-      });
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response = await post(
         Uri.parse(RenConfig.renApiUrl + "/api/employee"),
@@ -45,9 +44,11 @@ class _UserAddState extends State<UserAdd> {
         Navigator.pop(context);
       } else {
         setState(() {
-          body['message'].forEach((k, v) => {
-                for (var res_loop in v) {textError += res_loop + '\n'}
-              });
+          body['message'].forEach(
+            (k, v) => {
+              for (var res_loop in v) {textError += res_loop + '\n'}
+            },
+          );
           textError = textError.substring(0, textError.length - 2);
         });
       }
@@ -74,6 +75,7 @@ class _UserAddState extends State<UserAdd> {
               padding: EdgeInsets.all(0),
               child: Text(
                 textError,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.w500,
@@ -145,9 +147,7 @@ class _UserAddState extends State<UserAdd> {
                 color: RenStyle.renColorBase,
                 child: Text(
                   'Add',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
+                  style: TextStyle(fontSize: 18),
                 ),
                 onPressed: () {
                   addAction();

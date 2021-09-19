@@ -44,10 +44,14 @@ class _UserListViewState extends State<UserListView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    getData();
+  void initState() {
+    super.initState();
     print(apiResult);
+    getData();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return ListView.separated(
       padding: EdgeInsets.all(10),
       itemCount: this.value,

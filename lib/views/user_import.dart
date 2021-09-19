@@ -34,11 +34,10 @@ class _UserImportState extends State<UserImport> {
   }
 
   importAction() async {
-    textError = '';
+    setState(() {
+      textError = '';
+    });
     try {
-      setState(() {
-        textError = '';
-      });
       SharedPreferences prefs = await SharedPreferences.getInstance();
       MultipartRequest request = new MultipartRequest(
         "post",
@@ -61,9 +60,11 @@ class _UserImportState extends State<UserImport> {
         Navigator.pop(context);
       } else {
         setState(() {
-          body['message'].forEach((k, v) => {
-                for (var res_loop in v) {textError += res_loop + '\n'}
-              });
+          body['message'].forEach(
+            (k, v) => {
+              for (var res_loop in v) {textError += res_loop + '\n'}
+            },
+          );
           textError = textError.substring(0, textError.length - 2);
         });
       }
@@ -105,9 +106,7 @@ class _UserImportState extends State<UserImport> {
                 color: RenStyle.renColorGrey,
                 child: Text(
                   'Choose File',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
+                  style: TextStyle(fontSize: 18),
                 ),
                 onPressed: () {
                   chooseAction();
@@ -134,9 +133,7 @@ class _UserImportState extends State<UserImport> {
                 color: RenStyle.renColorBase,
                 child: Text(
                   'Import',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
+                  style: TextStyle(fontSize: 18),
                 ),
                 onPressed: () {
                   importAction();
