@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:attendance_mgi_mobile/helpers/config.dart';
-//import 'package:attendance_mgi_mobile/helpers/style.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../login.dart';
 
@@ -68,6 +68,14 @@ class _AttendanceState extends State<Attendance> {
     }
   }
 
+  fileLink() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var _url = RenConfig.renApiUrl +
+        "/api/attendance/export?token=" +
+        prefs.getString('api_token').toString();
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -76,45 +84,62 @@ class _AttendanceState extends State<Attendance> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: <Widget>[
-      DataTable(
-        //sortColumnIndex: 2,
-        //sortAscending: true,
-        columnSpacing: 0,
-        dataRowHeight: 30,
-        headingRowHeight: 30,
-        columns: const <DataColumn>[
-          DataColumn(label: Text('NIK')),
-          DataColumn(label: Text('Name')),
-          DataColumn(label: Text('Date')),
-          DataColumn(label: Text('In')),
-          DataColumn(label: Text('Out')),
-        ],
-        rows: this.dr,
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ListView(
+      padding: EdgeInsets.all(0),
+      children: <Widget>[
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            TextButton(
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: TextButton(
+                onPressed: fileLink,
+                child: Text("Export"),
+              ),
+            ),
+          ],
+        ),
+        DataTable(
+          //sortColumnIndex: 2,
+          //sortAscending: true,
+          columnSpacing: 0,
+          dataRowHeight: 30,
+          headingRowHeight: 30,
+          columns: const <DataColumn>[
+            DataColumn(label: Text('NIK')),
+            DataColumn(label: Text('Name')),
+            DataColumn(label: Text('Date')),
+            DataColumn(label: Text('In')),
+            DataColumn(label: Text('Out')),
+          ],
+          rows: this.dr,
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              TextButton(
                 onPressed: () {
                   page--;
                   if (page < 1) page = 1;
                   getData(page);
                 },
-                child: Text("Prev")),
-            Text(page.toString() + "/" + maxPage.toString()),
-            TextButton(
+                child: Text("Prev"),
+              ),
+              Text(page.toString() + "/" + maxPage.toString()),
+              TextButton(
                 onPressed: () {
                   page++;
                   if (page > maxPage) page = maxPage;
                   getData(page);
                 },
-                child: Text("Next")),
-          ],
-        ),
-      )
-    ]);
+                child: Text("Next"),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
   }
 }

@@ -5,6 +5,8 @@ import 'package:attendance_mgi_mobile/helpers/style.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
+//import 'package:geocoding/geocoding.dart';
 
 import '../login.dart';
 
@@ -127,6 +129,19 @@ class _HomeUserState extends State<HomeUser> {
       textError = '';
     });
     try {
+      // List<Placemark> placemarks = await placemarkFromCoordinates(
+      //     aa.latitude, aa.longitude,
+      //     localeIdentifier: "en");
+      // print(placemarks[0]);
+      // print(placemarks[0].locality);
+      // print(placemarks[0].postalCode);
+      // print(placemarks[0].country);
+      // print(placemarks[0].street);
+
+      Position aa = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      print(aa.latitude);
+      print(aa.longitude);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       //String token = prefs.getString('token');
       final Response response = await post(
@@ -136,8 +151,8 @@ class _HomeUserState extends State<HomeUser> {
           'Authorization': 'Bearer ' + prefs.getString('api_token').toString()
         },
         body: json.encode(<String, String>{
-          'lat': '-7.241308',
-          'lon': '106.942778',
+          'lat': aa.latitude.toString(),
+          'lon': aa.longitude.toString(),
         }),
       );
       var body = await json.decode(response.body);

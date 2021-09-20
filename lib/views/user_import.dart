@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserImport extends StatefulWidget {
   @override
@@ -76,6 +77,11 @@ class _UserImportState extends State<UserImport> {
     }
   }
 
+  fileLink() async {
+    var _url = RenConfig.renApiUrl + "/employee_import.xlsx";
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +118,18 @@ class _UserImportState extends State<UserImport> {
                   chooseAction();
                 },
               ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: TextButton(
+                    onPressed: fileLink,
+                    child: Text("Download Template"),
+                  ),
+                ),
+              ],
             ),
             Container(
               alignment: Alignment.center,
