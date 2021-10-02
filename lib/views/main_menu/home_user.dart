@@ -127,6 +127,8 @@ class _HomeUserState extends State<HomeUser> {
   tapAction() async {
     setState(() {
       textError = '';
+      textButton = "";
+      _buttonVisible = textButton != "";
     });
     try {
       // List<Placemark> placemarks = await placemarkFromCoordinates(
