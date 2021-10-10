@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:attendance_mgi_mobile/helpers/config.dart';
+import 'package:attendance_mgi_mobile/views/user_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,10 +42,30 @@ class _UserListState extends State<UserList> {
         for (var res in apiResult) {
           dr.add(DataRow(
             cells: <DataCell>[
-              DataCell(Text(res['nik'])),
-              DataCell(Text(res['name'])),
-              DataCell(Text(res['department'])),
-              DataCell(Text(res['shift'].toString())),
+              DataCell(
+                Text(res['nik']),
+                onTap: () {
+                  onTapDc(res);
+                },
+              ),
+              DataCell(
+                Text(res['name']),
+                onTap: () {
+                  onTapDc(res);
+                },
+              ),
+              DataCell(
+                Text(res['department']),
+                onTap: () {
+                  onTapDc(res);
+                },
+              ),
+              DataCell(
+                Text(res['shift'].toString()),
+                onTap: () {
+                  onTapDc(res);
+                },
+              ),
             ],
           ));
         }
@@ -56,10 +78,21 @@ class _UserListState extends State<UserList> {
     }
   }
 
+  void onTapDc(res) {
+    print(res);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserEdit(res)),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     getData(page);
+    Timer.periodic(new Duration(seconds: 3), (timer) {
+      getData(page);
+    });
   }
 
   @override
