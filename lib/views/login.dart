@@ -65,6 +65,7 @@ class _LoginState extends State<Login> {
       print(err);
       setState(() {
         textError = "Tidak bisa mengakses server";
+        // textError = err.toString();
       });
     }
   }
@@ -130,7 +131,7 @@ class _LoginState extends State<Login> {
                   controller: usernameController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'User Name',
+                    labelText: 'Username',
                     contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   ),
                 ),

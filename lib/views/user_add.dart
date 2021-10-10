@@ -84,7 +84,7 @@ class _UserAddState extends State<UserAdd> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: TextField(
                 controller: nikController,
                 decoration: InputDecoration(
