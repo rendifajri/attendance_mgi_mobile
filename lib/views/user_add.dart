@@ -16,6 +16,7 @@ class _UserAddState extends State<UserAdd> {
   TextEditingController nameController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController shiftController = TextEditingController();
+  TextEditingController deviceidController = TextEditingController();
   String textError = '';
 
   addAction() async {
@@ -36,6 +37,7 @@ class _UserAddState extends State<UserAdd> {
           'name': nameController.text,
           'department': departmentController.text,
           'shift': shiftController.text,
+          'device_id': deviceidController.text,
         }),
       ).timeout(Duration(seconds: 3));
       var body = json.decode(response.body);
@@ -46,7 +48,7 @@ class _UserAddState extends State<UserAdd> {
         setState(() {
           body['message'].forEach(
             (k, v) => {
-              for (var res_loop in v) {textError += res_loop + '\n'}
+              for (var resLoop in v) {textError += resLoop + '\n'}
             },
           );
           textError = textError.substring(0, textError.length - 2);
@@ -135,6 +137,17 @@ class _UserAddState extends State<UserAdd> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Shift',
+                  contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: TextField(
+                controller: deviceidController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Device ID',
                   contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 ),
               ),

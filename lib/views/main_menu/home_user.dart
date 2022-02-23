@@ -165,7 +165,7 @@ class _HomeUserState extends State<HomeUser> {
         setState(() {
           body['message'].forEach(
             (k, v) => {
-              for (var res_loop in v) {textError += res_loop + '\n'}
+              for (var resLoop in v) {textError += resLoop + '\n'}
             },
           );
           textError = textError.substring(0, textError.length - 2);

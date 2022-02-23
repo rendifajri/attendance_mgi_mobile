@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:attendance_mgi_mobile/helpers/config.dart';
 import 'package:attendance_mgi_mobile/helpers/style.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main_menu.dart';
@@ -17,6 +19,7 @@ class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String textError = '';
+  String textDevId = '';
 
   getSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -30,17 +33,19 @@ class _LoginState extends State<Login> {
     }
   }
 
-  loginAction() async {
+  Future loginAction() async {
     setState(() {
       textError = '';
     });
     try {
+      getDevIdAction();
       Response response = await post(
         Uri.parse(RenConfig.renApiUrl + "/api/login"),
         headers: <String, String>{"Content-Type": "application/json"},
         body: json.encode(<String, String>{
           'username': usernameController.text,
           'password': passwordController.text,
+          'device_id': textDevId,
         }),
       ).timeout(Duration(seconds: 10));
       // print(response);
@@ -68,6 +73,57 @@ class _LoginState extends State<Login> {
         // textError = err.toString();
       });
     }
+  }
+
+  Future getDevIdAction() async {
+    String deviceName = "";
+    String deviceVersion = "";
+    String identifier = "";
+    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        var build = await deviceInfoPlugin.androidInfo;
+        deviceName = build.model;
+        deviceVersion = build.version.toString();
+        identifier = build.androidId; //UUID for Android
+      } else if (Platform.isIOS) {
+        var data = await deviceInfoPlugin.iosInfo;
+        deviceName = data.name;
+        deviceVersion = data.systemVersion;
+        identifier = data.identifierForVendor; //UUID for iOS
+      }
+    } on PlatformException {
+      print('Failed to get platform version');
+    }
+    print(deviceName + " " + deviceVersion);
+    print(identifier);
+    textDevId = identifier;
+  }
+
+  Future getDeviceAction() async {
+    String deviceName = "";
+    String deviceVersion = "";
+    String identifier = "";
+    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        var build = await deviceInfoPlugin.androidInfo;
+        deviceName = build.model;
+        deviceVersion = build.version.toString();
+        identifier = build.androidId; //UUID for Android
+      } else if (Platform.isIOS) {
+        var data = await deviceInfoPlugin.iosInfo;
+        deviceName = data.name;
+        deviceVersion = data.systemVersion;
+        identifier = data.identifierForVendor; //UUID for iOS
+      }
+    } on PlatformException {
+      print('Failed to get platform version');
+    }
+    print(deviceName + " " + deviceVersion + " " + identifier);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(identifier),
+    ));
   }
 
   @override
@@ -160,6 +216,21 @@ class _LoginState extends State<Login> {
                   ),
                   onPressed: () {
                     loginAction();
+                  },
+                ),
+              ),
+              Container(
+                height: 65,
+                padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
+                child: MaterialButton(
+                  textColor: Colors.white,
+                  color: RenStyle.renColorBase,
+                  child: Text(
+                    'Device ID',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  onPressed: () {
+                    getDeviceAction();
                   },
                 ),
               ),

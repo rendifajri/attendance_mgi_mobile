@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:attendance_mgi_mobile/helpers/config.dart';
 import 'package:attendance_mgi_mobile/helpers/style.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +20,7 @@ class _UserEditState extends State<UserEdit> {
   TextEditingController nameController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController shiftController = TextEditingController();
+  TextEditingController deviceidController = TextEditingController();
   String textError = '';
   int id = 0;
 
@@ -42,6 +42,7 @@ class _UserEditState extends State<UserEdit> {
           'name': nameController.text,
           'department': departmentController.text,
           'shift': shiftController.text,
+          'device_id': deviceidController.text,
         }),
       ).timeout(Duration(seconds: 3));
       var body = json.decode(response.body);
@@ -52,7 +53,7 @@ class _UserEditState extends State<UserEdit> {
         setState(() {
           body['message'].forEach(
             (k, v) => {
-              for (var res_loop in v) {textError += res_loop + '\n'}
+              for (var resLoop in v) {textError += resLoop + '\n'}
             },
           );
           textError = textError.substring(0, textError.length - 2);
@@ -75,7 +76,8 @@ class _UserEditState extends State<UserEdit> {
     this.nikController.text = data['nik'];
     this.nameController.text = data['name'];
     this.departmentController.text = data['department'];
-    this.shiftController.text = data['shift'];
+    this.shiftController.text = data['shift'].toString();
+    this.deviceidController.text = data['user']['device_id'];
   }
 
   @override
@@ -153,6 +155,17 @@ class _UserEditState extends State<UserEdit> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Shift',
+                  contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: TextField(
+                controller: deviceidController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Device ID',
                   contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 ),
               ),
